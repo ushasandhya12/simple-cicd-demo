@@ -3,58 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Web Application</title>
-    <link rel="stylesheet" href="styles.css">
-    <!-- Link to any additional fonts or icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>Simple Calculator</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <nav>
-            <div class="logo">MyApp</div>
-            <ul class="nav-links">
-                <li><a href="#">Home</a></li>
-                <li><a href="#">Features</a></li>
-                <li><a href="#">About</a></li>
-                <li><a href="#">Contact</a></li>
-            </ul>
-            <div class="burger">
-                <i class="fas fa-bars"></i>
-            </div>
-        </nav>
-    </header>
+    <div class="calculator">
+        <input type="text" id="display" disabled>
+        <div class="buttons">
+            <button class="number" onclick="pressNumber(7)">7</button>
+            <button class="number" onclick="pressNumber(8)">8</button>
+            <button class="number" onclick="pressNumber(9)">9</button>
+            <button class="operator" onclick="pressOperator('/')">/</button>
+            <button class="number" onclick="pressNumber(4)">4</button>
+            <button class="number" onclick="pressNumber(5)">5</button>
+            <button class="number" onclick="pressNumber(6)">6</button>
+            <button class="operator" onclick="pressOperator('')"></button>
+            <button class="number" onclick="pressNumber(1)">1</button>
+            <button class="number" onclick="pressNumber(2)">2</button>
+            <button class="number" onclick="pressNumber(3)">3</button>
+            <button class="operator" onclick="pressOperator('-')">-</button>
+            <button class="number" onclick="pressNumber(0)">0</button>
+            <button class="operator" onclick="pressOperator('.')">.</button>
+            <button class="operator" onclick="pressOperator('+')">+</button>
+            <button class="equals" onclick="calculate()">=</button>
+            <button class="clear" onclick="clearDisplay()">C</button>
+        </div>
+    </div>
 
-    <main>
-        <section class="hero">
-            <h1>Welcome to My Web Application</h1>
-            <p>A modern solution for your needs</p>
-            <button class="cta-button">Get Started</button>
-        </section>
+    <script>
+        let display = document.getElementById('display');
+        let currentNumber = '';
+        let previousNumber = '';
+        let currentOperator = null;
 
-        <section class="features">
-            <div class="feature-card">
-                <i class="fas fa-rocket"></i>
-                <h3>Fast Performance</h3>
-                <p>Our app loads in seconds and works smoothly.</p>
-            </div>
-            <div class="feature-card">
-                <i class="fas fa-shield-alt"></i>
-                <h3>Secure</h3>
-                <p>Your data is protected with advanced security.</p>
-            </div>
-            <div class="feature-card">
-                <i class="fas fa-mobile-alt"></i>
-                <h3>Responsive</h3>
-                <p>Works perfectly on all devices and screen sizes.</p>
-            </div>
-        </section>
-    </main>
+        function pressNumber(number) {
+            currentNumber += number.toString();
+            display.value = currentNumber;
+        }
 
-    <footer>
-        <p>&copy; 2023 My Web Application. All rights reserved.</p>
-    </footer>
+        function pressOperator(operator) {
+            if (currentNumber === '') return;
+            if (currentOperator !== null) {
+                calculate();
+            }
+            previousNumber = currentNumber;
+            currentOperator = operator;
+            currentNumber = '';
+        }
 
-    <script src="script.js"></script>
+        function calculate() {
+            let result;
+            let num1 = parseFloat(previousNumber);
+            let num2 = parseFloat(currentNumber);
+            switch (currentOperator) {
+                case '+':
+                    result = num1 + num2;
+                    break;
+                case '-':
+                    result = num1 - num2;
+                    break;
+                case '*':
+                    result = num1 * num2;
+                    break;
+                case '/':
+                    if (num2 === 0) {
+                        result = 'Error';
+                    } else {
+                        result = num1 / num2;
+                    }
+                    break;
+                default:
+                    return;
+            }
+            display.value = result.toString();
+            previousNumber = '';
+            currentNumber = result.toString();
+            currentOperator = null;
+        }
+
+        function clearDisplay() {
+            display.value = '';
+            currentNumber = '';
+            previousNumber = '';
+            currentOperator = null;
+        }
+    </script>
 </body>
 </html>
